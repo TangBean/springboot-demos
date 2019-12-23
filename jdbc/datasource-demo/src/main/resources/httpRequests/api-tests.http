@@ -1,0 +1,5 @@
+GET {{baseUrl}}actuator/health
+Accept: application/json
+
+###
+

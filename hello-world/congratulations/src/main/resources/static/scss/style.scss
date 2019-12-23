@@ -1,0 +1,203 @@
+@import 'https://fonts.googleapis.com/css?family=Karla|Slackey|Sriracha';
+
+$WIDTH: 500px;
+$RATIO: 1.625;
+
+$tablet-width: 320px;
+$desktop-width: 1024px;
+
+$color-yellow: #ffce00;
+$color-red: #ff3c41;
+
+$font-title: 'Slackey', sans-serif;
+$font-copy: 'Karla', sans-serif;
+$font-subtitle: 'Karla', sans-serif;
+
+@mixin mobile {
+	@media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+		@content;
+	}
+}
+
+body {
+	background: radial-gradient(ellipse at center, #7db9e8 0%, #005da6 100%);
+	user-select: none;
+	perspective: 1000px;
+	margin: 0;
+	height: 100vh;
+	overflow: hidden;
+	@include mobile {
+		transform: scale(0.5);
+	}
+}
+
+* {
+	outline: none;
+}
+
+.invitation {
+	width: $WIDTH;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.envelope {
+	background: $color-red;
+	width: 100%;
+	height: $WIDTH/$RATIO;
+	position: relative;
+	z-index: 1;
+	&.is-open {
+		&:before,
+		&:after {
+			z-index: -2;
+		}
+	}
+}
+
+.envelope:before,
+.envelope:after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+}
+
+.envelope:before {
+	right: 0;
+	border-bottom: 0px solid transparent;
+	border-top: $WIDTH/$RATIO solid transparent;
+	border-right: $WIDTH solid darken($color-red, 2%);
+	z-index: 1;
+}
+
+.envelope:after {
+	left: 0;
+	border-bottom: 0px solid transparent;
+	border-top: $WIDTH/$RATIO solid transparent;
+	border-left: $WIDTH solid darken($color-red, 6%);
+	z-index: 1;
+}
+
+.flap {
+	border-right: $WIDTH/2 solid transparent;
+	border-top: ($WIDTH/2) / $RATIO solid darken($color-red, 15%);
+	border-left: $WIDTH/2 solid transparent;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform-origin: 50% 0%;
+	z-index: 2;
+}
+
+.mask {
+	box-sizing: border-box;
+	clip-path: inset(0 0 50% 0);
+	overflow: hidden;
+	position: relative;
+	width: $WIDTH * 0.96;
+	height: ($WIDTH * 1.34) * 3;
+	z-index: 0;
+	margin: auto;
+	top: 50%;
+	transform: translate(0, -50%);
+}
+
+.card {
+	position: relative;
+	width: $WIDTH * 0.96;
+	height: $WIDTH * 1.34;
+	margin: auto;
+	transform-style: preserve-3d;
+	transform-origin: 50% 10%;
+	transform: translate(0, 128%) rotateY(0deg);
+}
+
+.face {
+	top: 0; right: 0; bottom: 0; left: 0;
+	position: absolute;
+	background: transparent 50% 100%/auto 100% no-repeat;
+	box-shadow: 0 3px 6x rgba(#000, 0.3);
+	&:last-of-type {
+		transform: translateZ(-3px) rotateY(180deg);
+		background-size: 130% auto;
+	}
+}
+
+.front {
+	background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/39132/poke-bg.gif);
+	h1 {
+		position: relative;
+		font: normal 3em/0.9 $font-title;
+		letter-spacing: -2px;
+		color: $color-yellow;
+		padding: 30px 0 0;
+		margin: 0;
+		-webkit-font-smoothing: subpixel-antialiased;
+		img {
+			width: 90%;
+			display: block;
+			margin: auto;
+		}
+		span {
+			display: block;
+			text-align: center;
+			margin-top: 40px;
+			padding: 0 20%;
+			margin: auto;
+			line-height: 1.3;
+		}
+		.extrude {
+			text-shadow:
+				0 1px 0 darken($color-yellow, 5%),
+				0 2px 0 darken($color-yellow, 10%),
+				0 3px 0 darken($color-yellow, 15%),
+				0 4px 0 darken($color-yellow, 20%),
+				0 5px 0 darken($color-yellow, 25%),
+				0 6px 1px rgba(0, 0, 0, 0.0980392),
+				0 0 5px rgba(0, 0, 0, 0.0980392),
+				0 1px 3px rgba(0, 0, 0, 0.298039),
+				0 3px 5px rgba(0, 0, 0, 0.2),
+				0 5px 10px rgba(0, 0, 0, 0.247059);
+		}
+	}
+}
+
+.face.back {
+	background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/39132/poke-bg.jpg);
+	color: #000;
+	overflow: hidden;
+	img {
+		position: absolute;
+		top: 60px;
+		display: inline-block;
+		width: 90%;
+		left: 50%;
+		transform: translate(-50%, 0);
+	}
+}
+
+button {
+	font: normal 1.25em $font-copy;
+	padding: 15px 30px;
+	border-radius: 30px;
+	background: $color-yellow;
+	color: $color-red;
+	border: none;
+	position: absolute;
+	box-shadow: 0 1px 2px rgba(#000, 0.3);
+	left: 50%;
+	top: 170px;
+	transform: translate(-50%, -50%);
+	transform-origin: 50% 50%;
+	z-index: 1;
+	cursor: pointer;
+	transition:
+		background 0.3s ease-out,
+		color 0.3s ease-out;
+	&.invert {
+		color: $color-yellow;
+		background: darken($color-red, 15%);
+	}
+}
