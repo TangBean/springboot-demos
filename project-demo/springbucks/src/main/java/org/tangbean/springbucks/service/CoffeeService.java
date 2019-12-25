@@ -51,27 +51,17 @@ public class CoffeeService {
         Optional<Coffee> raw = findOneCoffee(name);
         log.info("Get coffee {} from Mongo.", name);
         // 将得到的Coffee对象存入缓存
-        if (raw.isPresent()) {
-            log.info("Put coffee {} to Redis.", name);
-            Coffee c = raw.get();
+        raw.ifPresent(c -> {
             CoffeeCache coffeeCache = CoffeeCache.builder()
                     .id(c.getId())
                     .name(c.getName())
                     .price(c.getPrice())
                     .build();
             hashOperations.put(CACHE_COLLECTION, name, coffeeCache);
+            // ⼀定注意设置过期时间！
             redisTemplate.expire(CACHE_COLLECTION, 1, TimeUnit.MINUTES);
-//            raw.ifPresent(c -> {
-//                CoffeeCache coffeeCache = CoffeeCache.builder()
-//                        .id(c.getId())
-//                        .name(c.getName())
-//                        .price(c.getPrice())
-//                        .build();
-//                log.info("Save Coffee {} to cache.", coffeeCache);
-//                hashOperations.put(CACHE_COLLECTION, name, coffeeCache);
-//                redisTemplate.expire(CACHE_COLLECTION, 1, TimeUnit.MINUTES);
-//            });
-        }
+            log.info("Put coffee {} to Redis.", name);
+        });
         return raw;
     }
 }
