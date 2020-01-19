@@ -22,17 +22,14 @@ public class RequestHandler implements InvocationHandler {
         System.out.println("当前调用的方法名：" + method.getName());
         System.out.println("方法传入的参数：" + Arrays.toString(args));
 
+        Object res = null;
         if (method.getName().matches("request.*")) {
             beforeInvoke();
-        } else {
-            preAnotherNameMethod();
-        }
-
-        Object res = method.invoke(target, args);  // 被代理的对象 target 才是真正去干活的
-
-        if (method.getName().matches("request.*")) {
+            res = method.invoke(target, args);
             afterInvoke();
         } else {
+            preAnotherNameMethod();
+            res = method.invoke(target, args);
             postAnotherNameMethod();
         }
 
